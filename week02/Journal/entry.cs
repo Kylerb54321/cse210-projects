@@ -2,40 +2,31 @@ using System;
 
 public class Entry
 {
-    public string Date { get; }
-    public string PromptText { get; }
-    public string EntryText { get; }
-
-    public Entry(string date, string promptText, string entryText)
-    {
-        Date = date;
-        PromptText = promptText;
-        EntryText = entryText;
-    }
+    public string Date { get; set; }
+    public string Prompt { get; set; }
+    public string Response { get; set; }
 
     public void Display()
     {
-        Console.WriteLine($"Date: {Date}");
-        Console.WriteLine($"Prompt: {PromptText}");
-        Console.WriteLine($"Entry: {EntryText}");
+        Console.WriteLine($"{Date} - {Prompt}");
+        Console.WriteLine(Response);
         Console.WriteLine();
     }
 
     public string ToFileFormat()
     {
-        return $"{Date}|{PromptText}|{EntryText}";
+        return $"{Date}|{Prompt}|{Response}";
     }
 
     public static Entry FromFileFormat(string line)
     {
         string[] parts = line.Split('|');
-        if (parts.Length == 3)
+        return new Entry
         {
-            return new Entry(parts[0], parts[1], parts[2]);
-        }
-        else
-        {
-            return null;
-        }
+            Date = parts[0],
+            Prompt = parts[1],
+            Response = parts[2]
+        };
     }
 }
+

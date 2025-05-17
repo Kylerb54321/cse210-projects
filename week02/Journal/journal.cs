@@ -11,14 +11,8 @@ public class Journal
         _entries.Add(entry);
     }
 
-    public void DisplayAll()
+    public void DisplayEntries()
     {
-        if (_entries.Count == 0)
-        {
-            Console.WriteLine("The journal is empty.\n");
-            return;
-        }
-
         foreach (Entry entry in _entries)
         {
             entry.Display();
@@ -27,36 +21,31 @@ public class Journal
 
     public void SaveToFile(string filename)
     {
-        using (StreamWriter writer = new StreamWriter(filename))
+        using (StreamWriter outputFile = new StreamWriter(filename))
         {
             foreach (Entry entry in _entries)
             {
-                writer.WriteLine(entry.ToFileFormat());
+                outputFile.WriteLine(entry.ToFileFormat());
             }
         }
-        Console.WriteLine($"Journal saved to '{filename}'.\n");
     }
 
     public void LoadFromFile(string filename)
     {
-        if (!File.Exists(filename))
+        if (File.Exists(filename))
         {
-            Console.WriteLine("File not found.\n");
-            return;
-        }
-
-        _entries.Clear(); // Replace current entries
-        string[] lines = File.ReadAllLines(filename);
-
-        foreach (string line in lines)
-        {
-            Entry entry = Entry.FromFileFormat(line);
-            if (entry != null)
+            string[] lines = File.ReadAllLines(filename);
+            _entries.Clear();
+            foreach (string line in lines)
             {
+                Entry entry = Entry.FromFileFormat(line);
                 _entries.Add(entry);
             }
         }
-
-        Console.WriteLine($"Journal loaded from '{filename}'.\n");
+        else
+        {
+            Console.WriteLine("File not found.");
+        }
     }
 }
+
